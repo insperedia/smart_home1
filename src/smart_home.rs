@@ -14,7 +14,7 @@ pub trait Device {
 pub struct Socket {
     pub power: bool,
     pub consumption: u64,
-    pub name: String
+    pub name: String,
 }
 
 #[allow(dead_code)]
@@ -34,17 +34,17 @@ impl Device for Socket {
     fn get_info(&self) -> HashMap<String, String> {
         HashMap::new()
     }
-
     fn get_name(&self) -> &str {
-       self.name.as_str()
+        self.name.as_str()
     }
 }
 
 #[allow(dead_code)]
 pub struct Thermometer {
     pub temperature: f32,
-    pub name: String
+    pub name: String,
 }
+
 #[allow(dead_code)]
 impl Thermometer {
     pub fn get_temperature() -> f32 {
@@ -70,7 +70,7 @@ pub trait RoomTrait<'a> {
 
 pub struct Room<'a> {
     name: String,
-    devices: HashMap<String, &'a dyn Device>
+    devices: HashMap<String, &'a dyn Device>,
 }
 /*
 impl<'a> RoomTrait<'a> for Room<'a> {
@@ -83,12 +83,12 @@ impl<'a> Room<'a> {
     pub fn new(name: &str) -> Room {
         Room {
             name: name.into(),
-            devices: HashMap::new()
+            devices: HashMap::new(),
         }
     }
 
-    pub fn add_device(&mut self, device: &'a dyn Device)  {
-        self.devices.insert(device.get_name().to_string(), device );
+    pub fn add_device(&mut self, device: &'a dyn Device) {
+        self.devices.insert(device.get_name().to_string(), device);
     }
 
     pub fn get_devices(&self) -> &HashMap<String, &'a dyn Device> {
@@ -101,27 +101,26 @@ impl<'a> Room<'a> {
 }
 
 pub struct SmartHouse<'a> {
-    rooms: HashMap<&'a str, &'a Room<'a>>
+    rooms: HashMap<&'a str, &'a Room<'a>>,
 }
 
- impl<'a> SmartHouse<'a> {
-    pub fn new() ->  SmartHouse<'a> {
+impl<'a> SmartHouse<'a> {
+    pub fn new() -> SmartHouse<'a> {
         SmartHouse {
-            rooms : HashMap::new()
+            rooms: HashMap::new()
         }
     }
 
-    pub fn add_room(& mut self,  room: &'a Room)  {
-        if self.rooms.contains_key(room.get_name()){
-           panic!("{} already exists", room.get_name());
+    pub fn add_room(&mut self, room: &'a Room) {
+        if self.rooms.contains_key(room.get_name()) {
+            panic!("{} already exists", room.get_name());
         }
         self.rooms.insert(room.get_name(), room);
     }
 
-     pub fn create_report(&self, report: &dyn Report) -> String {
-         report.create_report(self)
-     }
-
+    pub fn create_report(&self, report: &dyn Report) -> String {
+        report.create_report(self)
+    }
 }
 
 pub trait Report {
@@ -129,10 +128,11 @@ pub trait Report {
 }
 
 pub struct TextReport;
+
 impl Report for TextReport {
     fn create_report(&self, smart_house: &SmartHouse) -> String {
         let mut result = String::from("Text report:\n");
-        let rooms = & smart_house.rooms;
+        let rooms = &smart_house.rooms;
 
         for (room_name, room_trait) in rooms {
             result.push_str(format!("\tRoom: {room_name}\n").as_str());
@@ -145,10 +145,11 @@ impl Report for TextReport {
 }
 
 pub struct HtmlReport;
+
 impl Report for HtmlReport {
     fn create_report(&self, smart_house: &SmartHouse) -> String {
         let mut result = String::from("<html><body><h1>Text report</h1>\n");
-        let rooms = & smart_house.rooms;
+        let rooms = &smart_house.rooms;
 
         for (room_name, room_trait) in rooms {
             result.push_str("<div>");
