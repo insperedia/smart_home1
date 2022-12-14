@@ -18,7 +18,7 @@ pub struct Socket {
 }
 
 #[allow(dead_code)]
-impl<'a> Socket {
+impl Socket {
     pub fn get_power() -> bool {
         todo!()
     }
@@ -107,7 +107,7 @@ pub struct SmartHouse<'a> {
 impl<'a> SmartHouse<'a> {
     pub fn new() -> SmartHouse<'a> {
         SmartHouse {
-            rooms: HashMap::new()
+            rooms: HashMap::new(),
         }
     }
 
@@ -136,8 +136,8 @@ impl Report for TextReport {
 
         for (room_name, room_trait) in rooms {
             result.push_str(format!("\tRoom: {room_name}\n").as_str());
-            for (name, _) in room_trait.get_devices() {
-                result.push_str(format!("\t\t{name}\n").as_str());
+            for device_name in room_trait.get_devices().keys() {
+                result.push_str(format!("\t\t{device_name}\n").as_str());
             }
         }
         result
@@ -154,8 +154,8 @@ impl Report for HtmlReport {
         for (room_name, room_trait) in rooms {
             result.push_str("<div>");
             result.push_str(format!("\t<b>Room: {room_name}<b><br/>").as_str());
-            for (name, _) in room_trait.get_devices() {
-                result.push_str(format!("\t\t{name}<br/>").as_str());
+            for device_name in room_trait.get_devices().keys() {
+                result.push_str(format!("\t\t{device_name}<br/>").as_str());
             }
             result.push_str("</div>");
         }
