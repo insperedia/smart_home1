@@ -1,8 +1,6 @@
 use std::collections::HashMap;
-use std::ops::Deref;
 
-struct NameConflictError;
-
+#[allow(dead_code)]
 #[derive(Debug)]
 pub enum SmartHomeError {
     GeneralError,
@@ -19,6 +17,7 @@ pub struct Socket {
     pub name: String
 }
 
+#[allow(dead_code)]
 impl<'a> Socket {
     pub fn get_power() -> bool {
         todo!()
@@ -43,8 +42,8 @@ impl Device for Socket {
 
 #[allow(dead_code)]
 pub struct Thermometer {
-    temperature: f32,
-    name: String
+    pub temperature: f32,
+    pub name: String
 }
 #[allow(dead_code)]
 impl Thermometer {
@@ -112,36 +111,54 @@ pub struct SmartHouse<'a> {
         }
     }
 
-    pub fn add_room(&'a mut self,  room: &'a Room)  {
+    pub fn add_room(& mut self,  room: &'a Room)  {
         if self.rooms.contains_key(room.get_name()){
            panic!("{} already exists", room.get_name());
         }
         self.rooms.insert(room.get_name(), room);
     }
 
-     pub fn create_report(& self, report: TextReport) -> String {
-         let mut result = String::from("Text report:\n");
-         /*
-         for (room_name, room_trait) in self.rooms {
-            result.push_str(format!("Room: {room_name}").into());
-             for (name, device) in room_trait.get_devices() {
-
-             }
-         }
-
-          */
-         result
+     pub fn create_report(&self, report: &dyn Report) -> String {
+         report.create_report(self)
      }
 
 }
 
 pub trait Report {
-    fn create_report(&self, smart_house: &SmartHouse) -> &str;
+    fn create_report(&self, smart_house: &SmartHouse) -> String;
 }
 
 pub struct TextReport;
 impl Report for TextReport {
-    fn create_report(&self, smart_house: &SmartHouse) -> &str {
-        todo!()
+    fn create_report(&self, smart_house: &SmartHouse) -> String {
+        let mut result = String::from("Text report:\n");
+        let rooms = & smart_house.rooms;
+
+        for (room_name, room_trait) in rooms {
+            result.push_str(format!("\tRoom: {room_name}\n").as_str());
+            for (name, _) in room_trait.get_devices() {
+                result.push_str(format!("\t\t{name}\n").as_str());
+            }
+        }
+        result
+    }
+}
+
+pub struct HtmlReport;
+impl Report for HtmlReport {
+    fn create_report(&self, smart_house: &SmartHouse) -> String {
+        let mut result = String::from("<html><body><h1>Text report</h1>\n");
+        let rooms = & smart_house.rooms;
+
+        for (room_name, room_trait) in rooms {
+            result.push_str("<div>");
+            result.push_str(format!("\t<b>Room: {room_name}<b><br/>").as_str());
+            for (name, _) in room_trait.get_devices() {
+                result.push_str(format!("\t\t{name}<br/>").as_str());
+            }
+            result.push_str("</div>");
+        }
+        result.push_str("</body></html>");
+        result
     }
 }

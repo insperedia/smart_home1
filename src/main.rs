@@ -1,21 +1,36 @@
-
-use crate::smart_home::{SmartHouse, Room, RoomTrait, Socket, Device, TextReport};
+use crate::smart_home::{SmartHouse, Room, Socket, TextReport, Thermometer, HtmlReport};
 
 mod smart_home;
 
 fn main() {
-
+    let mut house = SmartHouse::new();
     let mut room = Room::new("Room1");
-    let socket = Socket{
+    let socket = Socket {
         power: false,
         consumption: 0,
-        name: "Socket1".to_string()
+        name: "Socket1".to_string(),
     };
     room.add_device(&socket);
-    let mut house = SmartHouse::new();
     house.add_room(&room);
 
-    let report = house.create_report(TextReport);
+    let mut room2 = Room::new("Room2");
+    let socket = Socket {
+        power: false,
+        consumption: 0,
+        name: "Socket2".to_string(),
+    };
+    room2.add_device(&socket);
+    let themometer = Thermometer {
+        temperature: 0.0,
+        name: "Thermometer1".to_string(),
+    };
+    room2.add_device(&themometer);
+    house.add_room(&room2);
+
+
+    let report = house.create_report(&TextReport);
     println!("{}", report);
 
+    let report = house.create_report(&HtmlReport);
+    println!("{}", report);
 }
