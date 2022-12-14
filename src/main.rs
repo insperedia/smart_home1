@@ -1,4 +1,4 @@
-use crate::smart_home::{SmartHouse, Room, Socket, TextReport, Thermometer, HtmlReport};
+use crate::smart_home::{HtmlReport, Room, SmartHouse, Socket, TextReport, Thermometer};
 
 mod smart_home;
 
@@ -26,7 +26,6 @@ fn main() {
     };
     room2.add_device(&themometer);
     house.add_room(&room2);
-
 
     let report = house.create_report(&TextReport);
     println!("{}", report);
