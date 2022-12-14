@@ -62,23 +62,11 @@ impl Device for Thermometer {
     }
 }
 
-pub trait RoomTrait<'a> {
-    fn add_device(&'a mut self, device: &'a dyn Device);
-    fn get_devices(&self) -> &HashMap<String, &'a dyn Device>;
-    fn get_name(&self) -> &str;
-}
-
 pub struct Room<'a> {
     name: String,
     devices: HashMap<String, &'a dyn Device>,
 }
-/*
-impl<'a> RoomTrait<'a> for Room<'a> {
 
-}
-
-
- */
 impl<'a> Room<'a> {
     pub fn new(name: &str) -> Room {
         Room {
