@@ -1,6 +1,7 @@
-use crate::smart_home::{HtmlReport, Room, SmartHouse, Socket, TextReport, Thermometer};
-
-mod smart_home;
+use smart_home;
+use smart_home::{Room, SmartHouse};
+use smart_home::report::{TextReport, HtmlReport};
+use smart_home::device::{Socket, Thermometer};
 
 fn main() {
     let mut house = SmartHouse::new();

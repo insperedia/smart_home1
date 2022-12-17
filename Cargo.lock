@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "otus"
+name = "smart_home"
 version = "0.1.0"
