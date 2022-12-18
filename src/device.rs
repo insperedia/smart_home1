@@ -1,5 +1,5 @@
-use std::collections::HashMap;
 use crate::SmartHomeError;
+use std::collections::HashMap;
 
 pub trait Device {
     fn get_info(&self) -> HashMap<String, String>;

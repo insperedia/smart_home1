@@ -1,14 +1,15 @@
-
 pub mod device;
 pub mod report;
-use std::collections::HashMap;
 use crate::device::Device;
 use crate::report::Report;
+use std::collections::HashMap;
 
 #[allow(dead_code)]
 #[derive(Debug)]
 pub enum SmartHomeError {
     GeneralError,
+    RoomExistsError(String),
+    DeviceExistsError(String),
 }
 
 pub struct Room<D: ?Sized> {
@@ -24,8 +25,18 @@ impl Room<dyn Device> {
         }
     }
 
-    pub fn add_device<D>(&mut self, device: D) where D: Device + 'static   {
-        self.devices.insert(device.get_name().to_string(),Box::new(device) );
+    pub fn add_device<D>(&mut self, device: D) -> Result<bool, SmartHomeError>
+    where
+        D: Device + 'static,
+    {
+        if self.devices.contains_key(device.get_name()) {
+            return Err(SmartHomeError::DeviceExistsError(
+                device.get_name().to_string(),
+            ));
+        }
+        self.devices
+            .insert(device.get_name().to_string(), Box::new(device));
+        Ok(true)
     }
 
     pub fn get_devices(&self) -> &HashMap<String, Box<dyn Device>> {
@@ -58,16 +69,15 @@ impl SmartHouse {
         self.name.as_str()
     }
 
-    pub fn add_room(&mut self, room: Room<dyn Device>) {
+    pub fn add_room(&mut self, room: Room<dyn Device>) -> Result<bool, SmartHomeError> {
         if self.rooms.contains_key(room.get_name()) {
-            panic!("{} already exists", room.get_name());
+            return Err(SmartHomeError::RoomExistsError(room.get_name().to_string()));
         }
         self.rooms.insert(room.get_name().to_string(), room);
+        Ok(true)
     }
 
     pub fn create_report(&self, report: &dyn Report) -> String {
         report.create_report(self)
     }
 }
-
-
