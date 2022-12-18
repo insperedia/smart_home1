@@ -3,12 +3,16 @@ pub mod report;
 use crate::device::Device;
 use crate::report::Report;
 use std::collections::HashMap;
+use thiserror::Error;
 
 #[allow(dead_code)]
-#[derive(Debug)]
+#[derive(Debug, Error)]
 pub enum SmartHomeError {
+    #[error("General error")]
     GeneralError,
+    #[error("Room {0} already exists")]
     RoomExistsError(String),
+    #[error("Device {0} already exists")]
     DeviceExistsError(String),
 }
 

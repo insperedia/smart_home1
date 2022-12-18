@@ -32,4 +32,11 @@ fn main() {
 
     let report = house.create_report(&HtmlReport);
     println!("{}", report);
+
+    let room = Room::new("Room1");
+    let result = house.add_room(room);
+    if result.is_err()
+    {
+        println!("{}", result.unwrap_err());
+    }
 }

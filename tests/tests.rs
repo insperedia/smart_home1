@@ -41,9 +41,9 @@ mod tests {
     #[test]
     fn house_has_name_and_rooms() {
         let house = prepare();
-        assert!(house.get_name().len() > 0);
+        assert!(!house.get_name().is_empty());
         let rooms = house.get_rooms();
-        assert!(rooms.len() > 0);
+        assert!(!rooms.is_empty());
     }
 
     #[test]
@@ -51,8 +51,8 @@ mod tests {
         let house = prepare();
         let rooms = house.get_rooms();
         let room = rooms.get("Room1").unwrap();
-        assert!(room.get_name().len() > 0);
-        assert!(room.get_devices().len() > 0);
+        assert!(!room.get_name().is_empty());
+        assert!(!room.get_devices().is_empty());
     }
 
     #[test]
@@ -79,6 +79,7 @@ mod tests {
 
     #[test]
     fn check_unique_device_enforcement() {
+
         let mut room = Room::new("Room1");
         let _ = room.add_device(Socket {
             power: false,
