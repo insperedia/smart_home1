@@ -46,5 +46,20 @@ mod tests {
         assert!(rooms.len() > 0);
     }
 
+    #[test]
+    fn house_has_rooms() {
+        let house = prepare();
+        let rooms = house.get_rooms();
+        let room = rooms.get("Room1").unwrap();
+        assert!(room.get_name().len() > 0);
+        assert!(room.get_devices().len() > 0);
+    }
+
+    #[test]
+    fn check_unique_enforcement() {
+        let mut house = SmartHouse::new("House1".into());
+        let mut room = Room::new("Room1");
+    }
+
 
 }

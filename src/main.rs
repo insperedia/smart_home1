@@ -1,4 +1,3 @@
-use smart_home;
 use smart_home::{Room, SmartHouse};
 use smart_home::report::{TextReport, HtmlReport};
 use smart_home::device::{Socket, Thermometer};
