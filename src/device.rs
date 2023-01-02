@@ -1,11 +1,13 @@
 use crate::SmartHomeError;
 use std::collections::HashMap;
+use serde::{Serialize, Deserialize};
 
 pub trait Device {
     fn get_info(&self) -> HashMap<String, String>;
     fn get_name(&self) -> &str;
 }
 
+#[derive(Default)]
 pub struct Socket {
     pub power: bool,
     pub consumption: u64,
@@ -34,7 +36,9 @@ impl Device for Socket {
     }
 }
 
+#[derive(Serialize, Deserialize)]
 #[allow(dead_code)]
+#[derive(Default)]
 pub struct Thermometer {
     pub temperature: f32,
     pub name: String,
